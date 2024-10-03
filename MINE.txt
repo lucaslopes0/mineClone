@@ -1,0 +1,54 @@
+MUNDO
+- o minecraft é feito com a API OpenGL.
+- a geração do mundo do minecraft é feita por uma lógica procedural
+- ele divide a geração de mundo em chunks, blocos de 16x16.
+- o relevo é feito pelo ruido/ perlin noise. 
+- no minecraft é preciso fazer relevo tanto acima quanto abaixo do solo
+- para não lagar o jogo é preciso renderizar apenas os blocos que o jogador pode ver
+- para isso é preciso verificar se existe algum bloco em volta de cada bloco a ser renderizado, e se tiver é preciso apagar a face do bloco
+
+PLAYER
+- raycast => encontrar a coordenada mais próxima do player e verificar os blocos que estão próximos a esta coordenada
+- quando o jogador destruir um bloco, é preciso deleta-lo e criar os possíveis blocos que estariam em volta dele.
+- Mira
+- 
+
+CHUNKS
+- chunks que estão fora do raio do player devem ser destruídas.
+- multi-thread para evitar travamentos
+- verificar a posição do player e ver se no raio em que ele está é preciso criar novas chunks ou não
+
+BLOCOS 
+- definir uma camada específica para cada bloco, por exemplo: abaixo da camada 59 => pedra, entre 60 e 62 => terra, acima de 62 => grama.
+- para colocar blocos no chão é preciso usar o raycast novamente, e renderizar um novo bloco na coordenada próxima.
+- contorno em volta dos blocos
+- progressão de quebra de um bloco
+- salvar todos os blocos criados ou quebrados por um jogador em uma lista e sempre que a chunk é recriada é preciso verificar se há algo quebrado ou construído pelo jogador
+
+
+TEXTURA
+
+
+
+
+MINERIOS/ARVORES/PLANTAS/FLORES
+- hash
+- definir uma numeração para cada bloco do mapa usando sua seed
+- verifica a numeração para ver se pode ou não ter um minério naquele local
+- quanto mais raro for o minério mais rígida é a hash
+
+AGUA
+
+
+INVENTARIO
+- o inventario do minecraft tem 27 slots e com a hotbar 36 espaços
+- possibilidades do inventario: selecionar um item e trocar sua posição com outro, selecionar um item e jogar no chão, pegar apenas metade de um item, adicionar apenas um item em um slot, adicionar vários itens iguais em vários slots, usar o shift para mover o inventario para hotbar e vice-versa etc...
+- verificar tudo
+- quando o jogador pega o item do chão é preciso verificar cada slot perguntando se o item do inventario é igual ao item do chão, e quando for igual, verificar se tem espaço sobrando.
+
+CRAFTING
+- verificar o tipo do bloco e a posição dele na crafting table, e toda vez que o bloco x for colocado em uma posição y e é gerado um código de craft, após isso percorre uma lista e verifica se tem o código de craft na lista, se tiver gera o item que encontrar.
+
+
+
+
