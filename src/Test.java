@@ -16,9 +16,9 @@ public class Test {
     private long window;
 
     public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
-        init();
+        System.out.println("Hello LWJGL " + Version.getVersion() + "!"); // reponsavel pelo print no console --> Version é do import da biblioteca
+                                                                         // e getVersion() é um método java para retornar a versão da biblioteca.
+        init();     //chama o metodo init e loop
         loop();
 
         // Free the window callbacks and destroy the window
@@ -105,9 +105,5 @@ public class Test {
             // invoked during this call.
             glfwPollEvents();
         }
-    }
-
-    public static void main(String[] args) {
-        new HelloWorld().run();
     }
 }
