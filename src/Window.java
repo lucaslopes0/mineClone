@@ -17,7 +17,7 @@ public class Window {
     Random rand = new Random();
     private long window;
 
-
+    private boolean isFullscreen = false;
 
     public void run(){
         System.out.println("LWJGL VERSION: "+ Version.getVersion());
@@ -32,44 +32,52 @@ public class Window {
         glfwSetErrorCallback(null).free();
     }
 
-    public void fullScreen(){
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_SOFT_FULLSCREEN, GLFW_TRUE);
-        glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0 ,0, 1920,1080, 165);
+    public void toggleFullscreen() {
+        GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+        if (isFullscreen) {
+            // Mudar para modo janela
+            glfwSetWindowMonitor(window, NULL, 100, 100, 400, 400, 0); // Tamanho e posição para janela
+            centralize();
+        } else {
+            // Mudar para tela cheia
+            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, vidMode.width(), vidMode.height(), vidMode.refreshRate());
+        }
+        isFullscreen = !isFullscreen;  // Alternar estado
     }
 
 
-    public void window(){
-        window = glfwCreateWindow(400, 400,"new", NULL, NULL);
-    }
-    public void init(){
+    public void init() {
         GLFWErrorCallback.createPrint(System.err).set();
 
-        if(!glfwInit())
+        if (!glfwInit())
             throw new RuntimeException("Err");
 
-        window = glfwCreateWindow(400, 400,"new", NULL, NULL);
+        window = glfwCreateWindow(400, 400, "new", NULL, NULL);
 
-        if(window == NULL)
+        if (window == NULL)
             throw new RuntimeException("err");
 
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods)->{
-            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window, true);
-            if(key == GLFW_KEY_M && action == GLFW_RELEASE)
-                glClearColor(rand.nextFloat()%255f, rand.nextFloat()%255f,rand.nextFloat()%255f,rand.nextFloat()%255f);
-            if(key == GLFW_KEY_F11 && action == GLFW_RELEASE) {
-                fullScreen();
+            if (key == GLFW_KEY_M && action == GLFW_RELEASE)
+                glClearColor(rand.nextFloat() % 255, rand.nextFloat() % 255, rand.nextFloat() % 255, rand.nextFloat() % 255);
+            if (key == GLFW_KEY_F11 && action == GLFW_RELEASE) {
+                toggleFullscreen();
             }
         });
 
-        try (MemoryStack stack = stackPush()){
+        centralize();
+    }
+    public void centralize () {
+        try (MemoryStack stack = stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
 
@@ -78,8 +86,8 @@ public class Window {
             GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
             glfwSetWindowPos(window,
-                    (vidMode.width() - pWidth.get(0))/2,
-                    (vidMode.height() - pHeight.get(0))/2
+                    (vidMode.width() - pWidth.get(0)) / 2,
+                    (vidMode.height() - pHeight.get(0)) / 2
             );
         }
 
