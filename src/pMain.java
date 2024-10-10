@@ -1,7 +1,6 @@
 public class pMain {
     public static void main (String[] args) {
-        //new Test().run();
-        //new treino().run();
-        new Window().run();
+        //new Window().run();
+        new teste().run();
     }
 }
