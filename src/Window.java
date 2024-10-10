@@ -58,7 +58,7 @@ public class Window {
         this.window = glfwCreateWindow(860, 460, "Minecraft", NULL, NULL);
 
 
-        GLFWImage.Buffer img = loadIcon("C:/Users/lucas/Desktop/projectMineClone/icons/mine.png"); //load_icon é um metodo que eu criei
+        GLFWImage.Buffer img = loadIcon(".//icons/mine.png"); //load_icon é um metodo que eu criei
         glfwSetWindowIcon(window,img);
 
         if (this.window == NULL)
