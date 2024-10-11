@@ -1,0 +1,19 @@
+// Criar array de pixels 16x16 com 4 canais (RGBA)
+        ByteBuffer pixels = MemoryUtil.memAlloc(16 * 16 * 4); // Tamanho 16x16 com 4 canais por pixel (RGBA)
+        for (int i = 0; i < 16 * 16 * 4; i++) {
+            pixels.put((byte) 0xAA); // Preencher com valor 0xFF (255)
+        }
+        pixels.flip(); // Preparar o buffer para leitura
+
+        // Definir as propriedades da imagem GLFW
+        GLFWImage image = GLFWImage.malloc();
+        image.set(16, 16, pixels);
+
+        // Criar o cursor customizado
+        long cursor = glfwCreateCursor(image, 0, 0);
+        if (cursor == NULL) {
+            throw new RuntimeException("Falha ao criar o cursor customizado.");
+        }
+
+        // Definir o cursor customizado para a janela
+        glfwSetCursor(window, cursor);
