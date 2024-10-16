@@ -1,204 +1,160 @@
-import org.lwjgl.Version;
-import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.Objects;
-import java.util.Random;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11C.*;
-import static org.lwjgl.stb.STBImage.*;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class Window {
-
-    private long window;
-
+public class Window{
+    private long windowHandle;
+    private int width, height;
+    private boolean resized = false;
     private boolean isFullscreen = false;
-    Random rand = new Random();
+    private String title;
+    private boolean vSync;
 
-
-    public void run(){
-        System.out.println("HELLO LWJGL " + Version.getVersion());
-        init();
-        loop();
-
-        glfwFreeCallbacks(this.window);
-        glfwDestroyWindow(this.window);
-
-
-        glfwTerminate();
-
-
-        //Garante que o valor não seja nulo antes de chamar free(),
-        //lançando uma NullPointerException se for nulo,
-        //mas de forma mais controlada e previsível.
-        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
-
+    //construtor da janela
+    public Window(String title, int width, int height, boolean vSync) {
+        this.title = title;
+        this.width = width;
+        this.height = height;
+        this.vSync = vSync;
     }
 
-    public void init(){
-        GLFWErrorCallback.createPrint(System.err).set();
+    public void init() {
+        if (!glfwInit()) {
+            throw new IllegalStateException("Unable to initialize GLFW");
+        }
 
-        if(!glfwInit())
-            throw new RuntimeException("Error: initialization failed");
+        //hints
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        
+        //window creation
+        this.windowHandle = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 
-        this.window = glfwCreateWindow(860, 460, "Minecraft", NULL, NULL);
-
-        if(this.window == NULL)
-            throw new RuntimeException("Error: GLFW window creation failed");
-
-
-        //load icon
-        GLFWImage.Buffer iconImage = loadImages(".//icons/mine.png");
-        glfwSetWindowIcon(this.window,iconImage);
-
-        //centralize window
         centralize();
 
-        //keyboard events
-        glfwSetKeyCallback(this.window, (window1, key, scancode, action, mods) -> {
-            if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                glfwSetWindowShouldClose(window1,true);
+        if (this.windowHandle == NULL) {
+            throw new RuntimeException("Failed to create the GLFW window");
+        }
 
-            if(key == GLFW_KEY_M && action == GLFW_RELEASE)
-                glClearColor(
-                        this.rand.nextFloat()%255,
-                        this.rand.nextFloat()%255,
-                        this.rand.nextFloat()%255,
-                        this.rand.nextFloat()%255
-                );
-            if(key ==  GLFW_KEY_F11 && action == GLFW_RELEASE)
-                toggleFullscreen();
-        });
+        glfwMakeContextCurrent(this.windowHandle);
+        if (vSync) {
+            glfwSwapInterval(1); // Habilita v-sync
+        }
 
-        //Cursor tracking
-        glfwSetCursorPosCallback(this.window, (window1, xpos, ypos)->{
-            double[] x = new double[1];
-            double[] y = new double[1];
-
-            glfwGetCursorPos(window1, x, y);
-            System.out.println("Cursor : X = " +xpos+ ", Y = "+ypos);
-        });
-
-        // Load Cursor Icon
-        GLFWImage.Buffer iconBuffer = loadImages(".//icons/cursor.png");
-        iconBuffer.get(0);
-        GLFWImage cursorImage = iconBuffer.get(0);
-
-        long cursor = glfwCreateCursor(cursorImage, 0,0);
-        glfwSetCursor(this.window,cursor);
-
-        iconBuffer.free();
-
-        //deixa o movimento do cursor ilimitado/ usado para controle de camera first person
-        //glfwSetInputMode(this.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-        //Mouse events
-        glfwSetMouseButtonCallback(this.window, ((window1, button, action, mods) -> {
-            if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-                System.out.println("Right button pressed");
-            int state = glfwGetMouseButton(window1, GLFW_MOUSE_BUTTON_LEFT);
-            if (state == GLFW_PRESS)
-                System.out.println("Pressing Left button");
-        }));
-
-        //Mouse scroll events
-        glfwSetScrollCallback(this.window, ((window1, xoffset, yoffset) -> {
-            if (yoffset == 1.0)
-                System.out.println("Up Scrolling");
-            else
-                System.out.println("Down Scrolling");
-        }));
-
-        /*
-        glfwSetCharCallback(this.window, (window, codepoint) ->{
-            String key_name = glfwGetKeyName(GLFW_KEY_M, GLFW_RELEASE);
-            System.out.printf("Press %S to change color.\n", key_name);
-        });
-        */
-
-        glfwMakeContextCurrent(this.window);
-        glfwSwapInterval(1);
-        glfwShowWindow(this.window);
-    }
-
-    public void loop(){
+        glfwShowWindow(this.windowHandle);
         GL.createCapabilities();
 
-        glClearColor(0.0f, 1.0f, 0.0f, 0.0f);
-
-        while(!glfwWindowShouldClose(window)){
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glfwSwapBuffers(this.window);
-            glfwPollEvents();
-
-        }
+        glfwSetFramebufferSizeCallback(this.windowHandle, (window, w, h) -> {
+            this.width = w;
+            this.height = h;
+            this.resized = true;
+        });
     }
 
-    private void toggleFullscreen() {
-        if(!this.isFullscreen){
-            glfwSetWindowMonitor(window, 0,0,0,860,460,165);
-            centralize();
-            this.isFullscreen = true;
-        }
-        else{
-            glfwWindowHint(GLFW_SOFT_FULLSCREEN, GLFW_TRUE);
-            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0,0, 1920,1080,165);
-            centralize();
-            this.isFullscreen = false;
-        }
+    public boolean isVSync() {
+        return vSync;
     }
+
+    public long getWindowHandle(){return this.windowHandle;}
 
     public void centralize(){
         try(MemoryStack stack = stackPush()){
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
 
-            glfwGetWindowSize(this.window,pWidth,pHeight);
+            glfwGetWindowSize(this.windowHandle,pWidth,pHeight);
 
             GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
             assert vidMode != null;
-            glfwSetWindowPos(this.window,
+            glfwSetWindowPos(this.windowHandle,
                     (vidMode.width() - pWidth.get(0))/2,
                     (vidMode.height() - pHeight.get(0))/2
             );
         }
     }
 
-    private GLFWImage.Buffer loadImages(String path) {
-        GLFWImage.Buffer icon;
 
-        try{
-            ByteBuffer image;
-            int[] width = new int[1];
-            int[] height = new int[1];
-            int[] channel = new int[1];
-
-            image = stbi_load(path, width, height,channel,4);
-            if(image == null)
-                throw new RuntimeException("Failed to load image: "+stbi_failure_reason());
-            else
-                System.out.println("Image loaded: " + width[0] + "x" + height[0]);
-
-            icon = GLFWImage.malloc(1);
-            icon.width(width[0]);
-            icon.height(height[0]);
-            icon.pixels(image);
-
-            stbi_image_free(image);
-        }catch (Exception err) {
-            throw new RuntimeException(err + ":" + stbi_failure_reason());
-        }
-        return icon;
+    public boolean isKeyPressed(int keyCode) {
+        return glfwGetKey(this.windowHandle, keyCode) == GLFW_PRESS;
     }
 
+    public boolean isMousePressed(int mButton){
+        return glfwGetMouseButton(this.windowHandle,mButton) == GLFW_PRESS;
+    }
+
+    public void cursorTracking(){
+        glfwSetCursorPosCallback(this.windowHandle, (window1, xpos, ypos)->{
+            double[] x = new double[1];
+            double[] y = new double[1];
+
+            glfwGetCursorPos(window1, x, y);
+            System.out.println("Cursor : X = " +xpos+ ", Y = "+ypos);
+        });
+    }
+
+    public void setMouseScroll(){
+        glfwSetScrollCallback(this.windowHandle, ((window1, xoffset, yoffset)->{
+            if (yoffset == 1.0)
+                System.out.println("Up Scrolling");
+            else
+                System.out.println("Down Scrolling");
+        }));
+    }
+
+    public void toggleFullscreen() {
+        if(!this.isFullscreen){
+            glfwSetWindowMonitor(this.windowHandle, 0,0,0,600,480,165);
+            centralize();
+            this.isFullscreen = true;
+        }
+        else{
+            glfwWindowHint(GLFW_SOFT_FULLSCREEN, GLFW_TRUE);
+            glfwSetWindowMonitor(this.windowHandle, glfwGetPrimaryMonitor(), 0,0, 1920,1080,165);
+            centralize();
+            this.isFullscreen = false;
+        }
+    }
+
+    public boolean isResized() {
+        return resized;
+    }
+
+    public void setResized(boolean resized) {
+        this.resized = resized;
+    }
+
+    public void setClearColor(float r, float g, float b, float alpha) {
+        glClearColor(r, g, b, alpha);
+    }
+
+    public void update() {
+        glfwSwapBuffers(this.windowHandle);
+        glfwPollEvents();
+    }
+
+    public boolean windowShouldClose() {
+        return glfwWindowShouldClose(this.windowHandle);
+    }
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public void cleanup() {
+        glfwFreeCallbacks(this.windowHandle);
+        glfwDestroyWindow(this.windowHandle);
+        glfwTerminate();
+    }
 }
