@@ -2,14 +2,12 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class InputHandler{
 
-    private Window window;
+    private final Window window;
 
-     
-
-    public void init(){
-        this.isKeyPressed()
-
+    public InputHandler(Window window){
+        this.window = window;
     }
+
 
     public boolean isKeyPressed(int keyCode) {
         return glfwGetKey(this.window.getWindowHandle(), keyCode) == GLFW_PRESS;

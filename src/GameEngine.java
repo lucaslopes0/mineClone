@@ -21,7 +21,7 @@ public class GameEngine implements Runnable {
         this.gameLogic = gameLogic;
         this.timer = new Timer();
         this.imageLoader = new ImageLoader(this.window);
-        this.inputHandler = new InputHandler();
+        this.inputHandler = new InputHandler(this.window);
     }
 
     public void start() {
@@ -45,7 +45,6 @@ public class GameEngine implements Runnable {
         this.gameLogic.init();
         this.timer.init();
         this.imageLoader.init();
-        this.inputHandler.init();
     }
 
     protected void gameLoop() {

@@ -8,6 +8,7 @@ public class GameFicticio implements IGameLogic {
     private float g = 0.0f;
     private float b = 0.0f;
     private final Renderer renderer;
+    private Window window;
     private boolean isF11Pressed = false;
     private boolean isPressed = false;
     private boolean isESCPressed = false;
@@ -23,30 +24,30 @@ public class GameFicticio implements IGameLogic {
     }
 
     @Override
-    public void input(Window window) {
-
-        if (window.isKeyPressed(GLFW_KEY_ESCAPE)){
+    public void input(InputHandler input) {
+        
+        if (input.isKeyPressed(GLFW_KEY_ESCAPE)){
             if(!this.isESCPressed){
-                glfwSetWindowShouldClose(window.getWindowHandle(),true);
+                glfwSetWindowShouldClose(this.window.getWindowHandle(),true);
                 this.isESCPressed = true;
             }
         }else this.isESCPressed = false;
 
-        if (window.isKeyPressed(GLFW_KEY_F11)) {
+        if (input.isKeyPressed(GLFW_KEY_F11)) {
             if (!this.isF11Pressed) {
-                window.toggleFullscreen();
+               this.window.toggleFullscreen();
                 this.isF11Pressed = true;
             }
         }else this.isF11Pressed = false;
 
 
-        if (window.isMousePressed(GLFW_MOUSE_BUTTON_1))
+        if (input.isMousePressed(GLFW_MOUSE_BUTTON_1))
             System.out.println("Left button pressed");
-        else if (window.isMousePressed(GLFW_MOUSE_BUTTON_2))
+        else if (input.isMousePressed(GLFW_MOUSE_BUTTON_2))
             System.out.println("Right button pressed");
 
 
-        if (window.isKeyPressed(GLFW_KEY_M)){
+        if (input.isKeyPressed(GLFW_KEY_M)){
             if (!this.isPressed) {
                 this.r = this.rand.nextFloat();
                 this.g = this.rand.nextFloat();
@@ -56,15 +57,14 @@ public class GameFicticio implements IGameLogic {
         }else this.isPressed = false;
 
 
-        window.setMouseScroll();
-        window.cursorTracking();
+        input.setMouseScroll();
+        input.cursorTracking();
     }
 
     @Override
     public void update(float interval) {
-
+        //
     }
-
     @Override
     public void render(Window window) {
         if (window.isResized()) {

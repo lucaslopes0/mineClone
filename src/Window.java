@@ -86,32 +86,19 @@ public class Window{
         }
     }
 
-
-    public boolean isKeyPressed(int keyCode) {
-        return glfwGetKey(this.windowHandle, keyCode) == GLFW_PRESS;
+    public void turnFullScreen(){
+        if(!this.isFullscreen){
+            glfwSetWindowMonitor(this.windowHandle, 0,0,0,600,480,165);
+            centralize();
+            this.isFullscreen = true;
+        }
     }
 
-    public boolean isMousePressed(int mButton){
-        return glfwGetMouseButton(this.windowHandle,mButton) == GLFW_PRESS;
-    }
-
-    public void cursorTracking(){
-        glfwSetCursorPosCallback(this.windowHandle, (window1, xpos, ypos)->{
-            double[] x = new double[1];
-            double[] y = new double[1];
-
-            glfwGetCursorPos(window1, x, y);
-            System.out.println("Cursor : X = " +xpos+ ", Y = "+ypos);
-        });
-    }
-
-    public void setMouseScroll(){
-        glfwSetScrollCallback(this.windowHandle, ((window1, xoffset, yoffset)->{
-            if (yoffset == 1.0)
-                System.out.println("Up Scrolling");
-            else
-                System.out.println("Down Scrolling");
-        }));
+    public void turnWindowed(){
+        glfwWindowHint(GLFW_SOFT_FULLSCREEN, GLFW_TRUE);
+        glfwSetWindowMonitor(this.windowHandle, glfwGetPrimaryMonitor(), 0,0, 1920,1080,165);
+        centralize();
+        this.isFullscreen = false;
     }
 
     public void toggleFullscreen() {
