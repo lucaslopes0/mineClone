@@ -1,3 +1,6 @@
+package Utils;
+
+import View.Window;
 import org.lwjgl.glfw.GLFWImage;
 
 import java.nio.ByteBuffer;

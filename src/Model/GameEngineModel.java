@@ -1,4 +1,11 @@
-public class GameEngine implements Runnable {
+package Model;
+
+import Utils.ImageLoader;
+import Controller.InputController;
+import Utils.Timer;
+import View.Window;
+
+public class GameEngineModel implements Runnable {
     private static final int TARGET_FPS = 60;
     private static final int TARGET_UPS = 30;
 
@@ -7,18 +14,18 @@ public class GameEngine implements Runnable {
     private final IGameLogic gameLogic;
     private final Timer timer;
     private final ImageLoader imageLoader;
-    private final InputHandler inputHandler;
+    private final InputController inputHandler;
 
 
 
-    //construtor GameEngine
-    public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
+    //construtor Model.GameEngine
+    public GameEngineModel(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
         this.gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         this.window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;
         this.timer = new Timer();
         this.imageLoader = new ImageLoader(this.window);
-        this.inputHandler = new InputHandler(this.window);
+        this.inputHandler = new InputController(this.window);
     }
 
     public void start() {

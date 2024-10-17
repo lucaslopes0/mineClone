@@ -1,10 +1,14 @@
+package Controller;
+
+import View.Window;
+
 import static org.lwjgl.glfw.GLFW.*;
 
-public class InputHandler{
+public class InputController {
 
     private final Window window;
 
-    public InputHandler(Window window){
+    public InputController(Window window){
         this.window = window;
     }
 

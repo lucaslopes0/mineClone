@@ -1,3 +1,5 @@
+package Utils;
+
 public class Timer {
     private double lastLoopTime;
 

@@ -1,10 +1,14 @@
+package View;
+
+import Controller.InputController;
+import Model.IGameLogic;
+
 import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11C.glIsTexture;
 import static org.lwjgl.opengl.GL11C.glViewport;
 
-public class GameFicticio implements IGameLogic {
+public class GameView implements IGameLogic {
     private float r = 0.0f;
     private float g = 0.0f;
     private float b = 0.0f;
@@ -14,7 +18,7 @@ public class GameFicticio implements IGameLogic {
     private boolean isESCPressed = false;
     Random rand = new Random();
 
-    public GameFicticio() {
+    public GameView() {
         this.renderer = new Renderer();
     }
 
@@ -24,7 +28,7 @@ public class GameFicticio implements IGameLogic {
     }
 
     @Override
-    public void input(InputHandler input, Window window) {
+    public void input(InputController input, Window window) {
         
         if (input.isKeyPressed(GLFW_KEY_ESCAPE)){
             if(!this.isESCPressed){

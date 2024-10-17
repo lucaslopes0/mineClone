@@ -1,3 +1,5 @@
+package View;
+
 import static org.lwjgl.opengl.GL11C.*;
 
 public class Renderer {
