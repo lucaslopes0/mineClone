@@ -1,6 +1,3 @@
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
-
 public class GameEngine implements Runnable {
     private static final int TARGET_FPS = 60;
     private static final int TARGET_UPS = 30;
@@ -63,14 +60,14 @@ public class GameEngine implements Runnable {
                 accumulator -= interval;
             }
             render();
-            if (!this.window.isVSync()) {
+            if (!this.window.isvSync()) {
                 sync();
             }
         }
     }
 
     protected void input() {
-        this.gameLogic.input(this.inputHandler);
+        this.gameLogic.input(this.inputHandler, this.window);
     }
 
     protected void update(float interval) {

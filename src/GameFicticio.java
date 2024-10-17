@@ -1,6 +1,7 @@
 import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11C.glIsTexture;
 import static org.lwjgl.opengl.GL11C.glViewport;
 
 public class GameFicticio implements IGameLogic {
@@ -8,7 +9,6 @@ public class GameFicticio implements IGameLogic {
     private float g = 0.0f;
     private float b = 0.0f;
     private final Renderer renderer;
-    private Window window;
     private boolean isF11Pressed = false;
     private boolean isPressed = false;
     private boolean isESCPressed = false;
@@ -24,18 +24,22 @@ public class GameFicticio implements IGameLogic {
     }
 
     @Override
-    public void input(InputHandler input) {
+    public void input(InputHandler input, Window window) {
         
         if (input.isKeyPressed(GLFW_KEY_ESCAPE)){
             if(!this.isESCPressed){
-                glfwSetWindowShouldClose(this.window.getWindowHandle(),true);
+                glfwSetWindowShouldClose(window.getWindowHandle(),true);
                 this.isESCPressed = true;
             }
         }else this.isESCPressed = false;
 
         if (input.isKeyPressed(GLFW_KEY_F11)) {
-            if (!this.isF11Pressed) {
-               this.window.toggleFullscreen();
+            if (!this.isF11Pressed){
+                if (window.isFullscreen())
+                    window.setWindowed();
+                else
+                    window.setFullscreen();
+
                 this.isF11Pressed = true;
             }
         }else this.isF11Pressed = false;

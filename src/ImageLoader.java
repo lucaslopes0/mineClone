@@ -15,45 +15,46 @@ public class ImageLoader {
     }
 
     public void init(){
-        ImageLoader.setWindowIcon(this.window.getWindowHandle(),".//icons/mine.png");
-        ImageLoader.setCursorImg(this.window.getWindowHandle(),".//icons/cursor.png");
+        this.setWindowIcon(".//icons/mine.png");
+        this.setCursorImg(".//icons/cursor.png");
     }
 
     private static GLFWImage.Buffer load(String path) {
         GLFWImage.Buffer icon;
-
+        ByteBuffer image = null;
         try{
-            ByteBuffer image;
             int[] width = new int[1];
             int[] height = new int[1];
             int[] channel = new int[1];
 
             image = stbi_load(path, width, height,channel,4);
             if(image == null)
-                throw new RuntimeException("Failed to load image: "+stbi_failure_reason());
+                throw new RuntimeException("Failed to load image at path: " + path + ". Reason: " + stbi_failure_reason());
 
             icon = GLFWImage.malloc(1);
             icon.width(width[0]);
             icon.height(height[0]);
             icon.pixels(image);
 
-            stbi_image_free(image);
         }catch (Exception err) {
             throw new RuntimeException(err + ":" + stbi_failure_reason());
+        }finally {
+            if(image!=null)
+                stbi_image_free(image);
         }
         return icon;
     }
 
-    public static void setWindowIcon(long window, String path) {
-        glfwSetWindowIcon(window, load(path));
+    private void setWindowIcon(String path) {
+        glfwSetWindowIcon(this.window.getWindowHandle(), load(path));
     }
 
-    public static void setCursorImg(long window, String path){
+    private void setCursorImg(String path){
         GLFWImage.Buffer iconBuffer = load(path);
         iconBuffer.get(0);
         GLFWImage cursorImage = iconBuffer.get(0);
         long cursor = glfwCreateCursor(cursorImage, 0,0);
-        glfwSetCursor(window, cursor);
+        glfwSetCursor(this.window.getWindowHandle(), cursor);
         iconBuffer.free();
     }
 }
