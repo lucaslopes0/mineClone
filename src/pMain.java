@@ -5,6 +5,7 @@ import Model.IGameLogic;
 public class pMain {
     public static void main (String[] args) {
         //new SimplyWIndow().run();
+
        try {
             boolean vSync = true;
             IGameLogic gameLogic = new GameView();

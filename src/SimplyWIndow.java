@@ -13,6 +13,7 @@ import java.util.Random;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11C.*;
+import static org.lwjgl.opengl.GL20.GL_SHADING_LANGUAGE_VERSION;
 import static org.lwjgl.stb.STBImage.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -27,6 +28,7 @@ public class SimplyWIndow {
 
     public void run(){
         System.out.println("HELLO LWJGL " + Version.getVersion());
+        System.out.println(glGetString(GL_SHADING_LANGUAGE_VERSION));
         init();
         loop();
 

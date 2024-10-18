@@ -6,7 +6,7 @@ import Model.IGameLogic;
 import java.util.Random;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11C.glViewport;
+import static org.lwjgl.opengl.GL11.glViewport;
 
 public class GameView implements IGameLogic {
     private float r = 0.0f;
@@ -18,8 +18,9 @@ public class GameView implements IGameLogic {
     private boolean isESCPressed = false;
     Random rand = new Random();
 
-    public GameView() {
+    public GameView() throws Exception {
         this.renderer = new Renderer();
+        this.renderer.init();
     }
 
     @Override
@@ -79,8 +80,10 @@ public class GameView implements IGameLogic {
             glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
         }
+        renderer.render(window);
+        /*
         window.setClearColor(this.r%255, this.g%255, this.b%255, 0.0f);
-        this.renderer.clear();
+        this.renderer.clear();*/
     }
 
     @Override

@@ -3,6 +3,7 @@ package Model;
 import Utils.ImageLoader;
 import Controller.InputController;
 import Utils.Timer;
+import View.Renderer;
 import View.Window;
 
 public class GameEngineModel implements Runnable {
@@ -15,6 +16,7 @@ public class GameEngineModel implements Runnable {
     private final Timer timer;
     private final ImageLoader imageLoader;
     private final InputController inputHandler;
+    private Renderer renderer;
 
 
 
@@ -26,6 +28,7 @@ public class GameEngineModel implements Runnable {
         this.timer = new Timer();
         this.imageLoader = new ImageLoader(this.window);
         this.inputHandler = new InputController(this.window);
+        this.renderer = new Renderer();
     }
 
     public void start() {
@@ -82,6 +85,7 @@ public class GameEngineModel implements Runnable {
     }
 
     protected void render() {
+        this.renderer.render(this.window);
         this.gameLogic.render(this.window);
         this.window.update();
     }
