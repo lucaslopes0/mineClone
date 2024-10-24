@@ -1,14 +1,14 @@
-package org.model;
+package org.engine;
 
 import org.graphics.Mesh;
 import org.graphics.Vertex;
 import org.maths.Vector;
-import org.views.*;
 import org.utils.*;
+import org.view.*;
 import org.controller.*;
 
 
-public class GameEngineModel implements Runnable {
+public class GameEngine implements Runnable {
     private static final int TARGET_FPS = 60;
     private static final int TARGET_UPS = 30;
 
@@ -22,7 +22,7 @@ public class GameEngineModel implements Runnable {
     private Mesh mesh;
 
     //construtor Model.GameEngine
-    public GameEngineModel(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
+    public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
         this.gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         this.window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;

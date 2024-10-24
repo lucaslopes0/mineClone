@@ -1,16 +1,14 @@
 package org.main;
 
-import org.model.*;
-import org.views.*;
+import org.engine.*;
+import org.view.*;
 
 public class pMain {
     public static void main (String[] args) {
-        //new SimplyWIndow().run();
-
         try {
             boolean vSync = true;
             IGameLogic gameLogic = new GameView();
-            GameEngineModel gameEng = new GameEngineModel("Game", 600, 480, vSync, gameLogic);
+            GameEngine gameEng = new GameEngine("Game", 600, 480, vSync, gameLogic);
             gameEng.start();
         } catch (Exception e) {
             e.printStackTrace();

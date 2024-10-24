@@ -1,8 +1,8 @@
 package org.controller;
 
-import org.views.*;
-
 import static org.lwjgl.glfw.GLFW.*;
+
+import org.view.*;
 
 public class InputController {
 

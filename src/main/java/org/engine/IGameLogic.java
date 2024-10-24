@@ -1,7 +1,7 @@
-package org.model;
+package org.engine;
 
-import org.views.*;
 import org.controller.*;
+import org.view.*;
 
 public interface IGameLogic {
     void init() throws Exception;
