@@ -1,5 +1,7 @@
 package org.controller;
 
+import org.view.*;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 import org.view.*;
