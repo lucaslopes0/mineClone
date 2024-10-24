@@ -5,17 +5,18 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.security.PublicKey;
 import java.util.Objects;
 import java.util.Random;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11C.*;
-import static org.lwjgl.opengl.GL20.GL_SHADING_LANGUAGE_VERSION;
 import static org.lwjgl.stb.STBImage.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -73,7 +74,7 @@ public class SimplyWIndow {
                 glfwSetWindowShouldClose(window1,true);
 
             if(key == GLFW_KEY_M && action == GLFW_PRESS)
-                glClearColor(
+                    glClearColor(
                         this.rand.nextFloat()%255,
                         this.rand.nextFloat()%255,
                         this.rand.nextFloat()%255,
@@ -137,7 +138,7 @@ public class SimplyWIndow {
     public void loop(){
         GL.createCapabilities();
 
-        glClearColor(0.0f, 1.0f, 0.0f, 0.0f);
+        GL11.glClearColor(0.0f, 1.0f, 0.0f, 0.0f);
 
         while(!glfwWindowShouldClose(window)){
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -203,6 +204,9 @@ public class SimplyWIndow {
             throw new RuntimeException(err + ":" + stbi_failure_reason());
         }
         return icon;
+    }
+    public static void main(String[] args){
+        new SimplyWIndow().run();
     }
 
 }
