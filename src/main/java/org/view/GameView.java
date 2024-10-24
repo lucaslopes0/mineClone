@@ -3,7 +3,6 @@ package org.view;
 import org.controller.*;
 import org.engine.IGameLogic;
 import org.maths.Vector;
-import org.view.*;
 
 import java.util.Random;
 
@@ -12,7 +11,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 public class GameView implements IGameLogic {
 
-    private final Renderer renderer;
+    private Renderer renderer;
     private boolean isF11Pressed = false;
     private boolean isESCPressed = false;
     Random rand = new Random();
