@@ -1,4 +1,4 @@
-package org.views;
+package org.view;
 
 import org.graphics.Mesh;
 

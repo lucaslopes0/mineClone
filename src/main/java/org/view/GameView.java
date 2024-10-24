@@ -1,8 +1,8 @@
-package org.views;
+package org.view;
 
 import org.controller.*;
+import org.engine.IGameLogic;
 import org.maths.Vector;
-import org.model.*;
 
 import java.util.Random;
 

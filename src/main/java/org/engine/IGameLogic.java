@@ -1,6 +1,6 @@
-package org.model;
+package org.engine;
 
-import org.views.*;
+import org.view.*;
 import org.controller.*;
 
 public interface IGameLogic {

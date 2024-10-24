@@ -1,9 +1,9 @@
-package org.model;
+package org.engine;
 
 import org.graphics.Mesh;
 import org.graphics.Vertex;
 import org.maths.Vector;
-import org.views.*;
+import org.view.*;
 import org.utils.*;
 import org.controller.*;
 

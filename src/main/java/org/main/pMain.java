@@ -1,8 +1,8 @@
 package org.main;
 
-import org.example.SimplyWIndow;
-import org.model.*;
-import org.views.*;
+import org.engine.GameEngineModel;
+import org.engine.IGameLogic;
+import org.view.*;
 
 public class pMain {
     public static void main (String[] args) {

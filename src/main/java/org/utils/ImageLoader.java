@@ -1,6 +1,6 @@
 package org.utils;
 
-import org.views.*;
+import org.view.*;
 import org.lwjgl.glfw.GLFWImage;
 
 import java.nio.ByteBuffer;
