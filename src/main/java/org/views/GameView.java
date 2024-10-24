@@ -13,7 +13,6 @@ public class GameView implements IGameLogic {
 
     private final Renderer renderer;
     private boolean isF11Pressed = false;
-    private boolean isPressed = false;
     private boolean isESCPressed = false;
     Random rand = new Random();
     private Vector background = new Vector(this.rand.nextFloat(),this.rand.nextFloat(),this.rand.nextFloat());

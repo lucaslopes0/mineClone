@@ -1,6 +1,5 @@
 package org.main;
 
-import org.example.SimplyWIndow;
 import org.model.*;
 import org.views.*;
 
