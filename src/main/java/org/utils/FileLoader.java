@@ -7,14 +7,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class FileLoader {
-    public static String loadResource(String fileName) throws IOException {
-        String result;
-        try (InputStream in = FileLoader.class.getResourceAsStream(fileName)) {
-            assert in != null;
-            try (Scanner scanner = new Scanner(new InputStreamReader(in, StandardCharsets.UTF_8))) {
-                result = scanner.useDelimiter("\\A").next();
+
+    public String loadResource(String fileName) throws IOException {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName)) {
+            if (inputStream == null) {
+                throw new IOException("Arquivo de shader não encontrado: " + fileName);
             }
+            return new String(inputStream.readAllBytes());
         }
-        return result;
     }
 }

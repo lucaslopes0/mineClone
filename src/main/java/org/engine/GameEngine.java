@@ -55,6 +55,7 @@ public class GameEngine implements Runnable {
         this.gameLogic.init();
         this.timer.init();
         this.imageLoader.init();
+        this.renderer.init();
         this.mesh.create();
     }
 
@@ -89,7 +90,7 @@ public class GameEngine implements Runnable {
     }
 
     protected void render() {
-        this.renderer.render(this.window, this.mesh);
+        this.renderer.render(this.mesh);
         //this.renderer.renderMesh(this.mesh);
         this.gameLogic.render(this.window);
         this.window.update();
