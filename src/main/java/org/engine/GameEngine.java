@@ -1,14 +1,13 @@
 package org.engine;
 
+import org.graphics.GeometricForms;
 import org.graphics.Mesh;
-import org.graphics.Vertex;
-import org.maths.Vector;
 import org.view.*;
 import org.utils.*;
 import org.controller.*;
 
 
-public class GameEngineModel implements Runnable {
+public class GameEngine implements Runnable {
     private static final int TARGET_FPS = 60;
     private static final int TARGET_UPS = 30;
 
@@ -17,28 +16,22 @@ public class GameEngineModel implements Runnable {
     private final IGameLogic gameLogic;
     private final Timer timer;
     private final ImageLoader imageLoader;
-    private final InputController inputHandler;
+    private final KeyboardInput KeyInputHandler;
+    private final MouseInput MouseInputHandler;
     private Renderer renderer;
     private Mesh mesh;
 
     //construtor Model.GameEngine
-    public GameEngineModel(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
+    public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception {
         this.gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         this.window = new Window(windowTitle, width, height, vSync);
         this.gameLogic = gameLogic;
         this.timer = new Timer();
         this.imageLoader = new ImageLoader(this.window);
-        this.inputHandler = new InputController(this.window);
+        this.KeyInputHandler = new KeyboardInput(this.window);
+        this.MouseInputHandler = new MouseInput(this.window);
         this.renderer = new Renderer();
-        this.mesh = new Mesh(new Vertex[]{
-                new Vertex(new Vector(-0.5f,  0.5f, 0.0f)),
-                new Vertex(new Vector( 0.5f,  0.5f, 0.0f)),
-                new Vertex(new Vector( 0.5f, -0.5f, 0.0f)),
-                new Vertex(new Vector(-0.5f, -0.5f, 0.0f))
-        }, new int[]{
-                0,1,2,
-                0,3,2,
-        });
+        this.mesh = GeometricForms.drawTriangle();
     }
 
     public void start() {
@@ -72,7 +65,7 @@ public class GameEngineModel implements Runnable {
 
         while (!this.window.windowShouldClose()) {
             elapsedTime = this.timer.getElapsedTime();
-            accumulator += elapsedTime;
+            accumulator += (float) elapsedTime;
 
             input();
 
@@ -88,7 +81,7 @@ public class GameEngineModel implements Runnable {
     }
 
     protected void input() {
-        this.gameLogic.input(this.inputHandler, this.window);
+        this.gameLogic.input(this.KeyInputHandler,this.MouseInputHandler, this.window);
     }
 
     protected void update(float interval) {
@@ -96,8 +89,8 @@ public class GameEngineModel implements Runnable {
     }
 
     protected void render() {
-        this.renderer.render(this.window);
-        this.renderer.renderMesh(this.mesh);
+        this.renderer.render(this.window, this.mesh);
+        //this.renderer.renderMesh(this.mesh);
         this.gameLogic.render(this.window);
         this.window.update();
     }

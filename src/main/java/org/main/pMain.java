@@ -1,6 +1,6 @@
 package org.main;
 
-import org.engine.GameEngineModel;
+import org.engine.GameEngine;
 import org.engine.IGameLogic;
 import org.view.*;
 
@@ -11,7 +11,7 @@ public class pMain {
         try {
             boolean vSync = true;
             IGameLogic gameLogic = new GameView();
-            GameEngineModel gameEng = new GameEngineModel("Game", 600, 480, vSync, gameLogic);
+            GameEngine gameEng = new GameEngine("Game", 600, 480, vSync, gameLogic);
             gameEng.start();
         } catch (Exception e) {
             e.printStackTrace();
