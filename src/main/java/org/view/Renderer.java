@@ -10,7 +10,7 @@ public class Renderer {
 
     public void init() throws Exception {
         // Inicializa os shaders
-        this.shaderProgram = new ShadersProgram("./src/main/java/org/vertex.glsl", "./src/main/java/org/fragment.glsl");
+        this.shaderProgram = new ShadersProgram("vertex.vert", "fragment.frag");
     }
     public void render(Mesh mesh) {
         this.shaderProgram.bind(); // Ativa o programa de shaders

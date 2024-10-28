@@ -6,7 +6,6 @@ import org.view.*;
 
 public class pMain {
     public static void main (String[] args) {
-        //new SimplyWIndow().run();
 
         try {
             boolean vSync = true;

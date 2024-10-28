@@ -5,7 +5,6 @@ import org.utils.*;
 
 public class ShadersProgram {
     private final int programId;
-    private FileLoader ld = new FileLoader();
     public ShadersProgram(String vertexFileName, String fragmentFileName) throws Exception {
         // Criação do programa de shader
         this.programId = glCreateProgram();
@@ -14,8 +13,8 @@ public class ShadersProgram {
         }
 
         // Carregar e compilar os shaders
-        int vertexShaderId = createShader(this.ld.loadResource(vertexFileName), GL_VERTEX_SHADER);
-        int fragmentShaderId = createShader(this.ld.loadResource(fragmentFileName), GL_FRAGMENT_SHADER);
+        int vertexShaderId = createShader(new FileLoader().loadResource(vertexFileName), GL_VERTEX_SHADER);
+        int fragmentShaderId = createShader(new FileLoader().loadResource(fragmentFileName), GL_FRAGMENT_SHADER);
 
         // Linkar os shaders ao programa
         glAttachShader(programId, vertexShaderId);
