@@ -1,8 +1,9 @@
 #version 330 core
 
-in vec4 vertexColor; // Cor vinda do Vertex Shader
+in vec4 vertexColor;
 out vec4 FragColor;
+uniform vec4 u_Color;  // Recebe a cor definida pelo programa Java
 
 void main() {
-    FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    FragColor = vertexColor;  // Usa a cor do vértice
 }

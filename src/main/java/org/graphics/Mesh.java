@@ -39,37 +39,39 @@ public class Mesh {
 
     public void create(){
 
-        FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(this.vertices.length*7);
-        float[] positionData =  new float[this.vertices.length * 7];
-        for (int i = 0; i < this.vertices.length; i++) {
-            positionData[i * 7] = this.vertices[i].getPosition().getX();
-            positionData[i * 7 + 1] = this.vertices[i].getPosition().getY();
-            positionData[i * 7 + 2] = this.vertices[i].getPosition().getZ();
+        FloatBuffer vertexBuffer = MemoryUtil.memAllocFloat(vertices.length * 7);  // 3 posição + 4 cor
 
-            // Adiciona cor
-            positionData[i * 7 + 3] = this.vertices[i].getColor().getR();
-            positionData[i * 7 + 4] = this.vertices[i].getColor().getG();
-            positionData[i * 7 + 5] = this.vertices[i].getColor().getB();
-            positionData[i * 7 + 6] = this.vertices[i].getColor().getA();
+        for (Vertex vertex : vertices) {
+            vertexBuffer.put(vertex.getPosition().getX());
+            vertexBuffer.put(vertex.getPosition().getY());
+            vertexBuffer.put(vertex.getPosition().getZ());
+
+            vertexBuffer.put(vertex.getColor().getR());
+            vertexBuffer.put(vertex.getColor().getG());
+            vertexBuffer.put(vertex.getColor().getB());
+            vertexBuffer.put(vertex.getColor().getA());
         }
-        positionBuffer.put(positionData).flip();
+        vertexBuffer.flip();  // Preparar para leitura
 
         this.vao = glGenVertexArrays();
         glBindVertexArray(this.vao);
 
         this.pbo = glGenBuffers();
-
         glBindBuffer(GL_ARRAY_BUFFER, this.pbo);
-        glBufferData(GL_ARRAY_BUFFER,positionBuffer,GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0,3, GL_FLOAT,false, Float.BYTES*7,0);
+        // Definição do atributo de posição (location = 0)
         glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * Float.BYTES, 0);
 
-        glVertexAttribPointer(1,4, GL_FLOAT,false, Float.BYTES*7,Float.BYTES*3);
+        // Definição do atributo de cor (location = 1)
         glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 7 * Float.BYTES, 3 * Float.BYTES);
 
-        glBindBuffer(GL_ARRAY_BUFFER,0);
+        // Desvincula o buffer e o VAO
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
+
 
         IntBuffer indicesBuffer = MemoryUtil.memAllocInt(this.indices.length);
         indicesBuffer.put(this.indices).flip();

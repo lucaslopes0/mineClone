@@ -2,6 +2,8 @@ package org.engine;
 
 import org.graphics.GeometricForms;
 import org.graphics.Mesh;
+import org.graphics.ShadersProgram;
+import org.maths.VectorColor;
 import org.view.*;
 import org.utils.*;
 import org.controller.*;
@@ -31,7 +33,7 @@ public class GameEngine implements Runnable {
         this.KeyInputHandler = new KeyboardInput(this.window);
         this.MouseInputHandler = new MouseInput(this.window);
         this.renderer = new Renderer();
-        this.mesh = GeometricForms.drawTriangle();
+        this.mesh = GeometricForms.drawSquare();
     }
 
     public void start() {
@@ -90,7 +92,7 @@ public class GameEngine implements Runnable {
     }
 
     protected void render() {
-        this.renderer.render(this.mesh);
+        this.renderer.render(this.mesh,this.window);
         //this.renderer.renderMesh(this.mesh);
         this.gameLogic.render(this.window);
         this.window.update();
