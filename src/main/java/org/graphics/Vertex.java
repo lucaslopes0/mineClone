@@ -1,20 +1,25 @@
 package org.graphics;
 
-import org.maths.Vector;
+import org.maths.*;
 
 public class Vertex {
 
-    private Vector position;
+    private VectorPosition position;
+    private VectorColor color;
 
-    public Vertex(Vector position){
+    public Vertex(VectorPosition position, VectorColor color){
+        this.position = position;
+        this.color = color;
+    }
+
+    public VectorPosition getPosition() {return this.position;}
+
+    public VectorColor getColor(){return this.color;}
+
+    public void setPosition(VectorPosition position) {
         this.position = position;
     }
 
-    public Vector getPosition() {
-        return position;
-    }
+    public void setColor(VectorColor color){this.color = color;}
 
-    public void setPosition(Vector position) {
-        this.position = position;
-    }
 }

@@ -1,8 +1,9 @@
 package org.engine;
 
+import org.graphics.GeometricForms;
 import org.graphics.Mesh;
-import org.graphics.Vertex;
-import org.maths.Vector;
+import org.graphics.ShadersProgram;
+import org.maths.VectorColor;
 import org.view.*;
 import org.utils.*;
 import org.controller.*;
@@ -17,7 +18,8 @@ public class GameEngine implements Runnable {
     private final IGameLogic gameLogic;
     private final Timer timer;
     private final ImageLoader imageLoader;
-    private final InputController inputHandler;
+    private final KeyboardInput KeyInputHandler;
+    private final MouseInput MouseInputHandler;
     private Renderer renderer;
     private Mesh mesh;
 
@@ -28,17 +30,10 @@ public class GameEngine implements Runnable {
         this.gameLogic = gameLogic;
         this.timer = new Timer();
         this.imageLoader = new ImageLoader(this.window);
-        this.inputHandler = new InputController(this.window);
+        this.KeyInputHandler = new KeyboardInput(this.window);
+        this.MouseInputHandler = new MouseInput(this.window);
         this.renderer = new Renderer();
-        this.mesh = new Mesh(new Vertex[]{
-                new Vertex(new Vector(-0.5f,  0.5f, 0.0f)),
-                new Vertex(new Vector( 0.5f,  0.5f, 0.0f)),
-                new Vertex(new Vector( 0.5f, -0.5f, 0.0f)),
-                new Vertex(new Vector(-0.5f, -0.5f, 0.0f))
-        }, new int[]{
-                0,1,2,
-                0,3,2,
-        });
+        this.mesh = GeometricForms.drawSquare();
     }
 
     public void start() {
@@ -62,6 +57,7 @@ public class GameEngine implements Runnable {
         this.gameLogic.init();
         this.timer.init();
         this.imageLoader.init();
+        this.renderer.init();
         this.mesh.create();
     }
 
@@ -72,7 +68,7 @@ public class GameEngine implements Runnable {
 
         while (!this.window.windowShouldClose()) {
             elapsedTime = this.timer.getElapsedTime();
-            accumulator += elapsedTime;
+            accumulator += (float) elapsedTime;
 
             input();
 
@@ -88,7 +84,7 @@ public class GameEngine implements Runnable {
     }
 
     protected void input() {
-        this.gameLogic.input(this.inputHandler, this.window);
+        this.gameLogic.input(this.KeyInputHandler,this.MouseInputHandler, this.window);
     }
 
     protected void update(float interval) {
@@ -96,8 +92,8 @@ public class GameEngine implements Runnable {
     }
 
     protected void render() {
-        this.renderer.render(this.window);
-        this.renderer.renderMesh(this.mesh);
+        this.renderer.render(this.mesh,this.window);
+        //this.renderer.renderMesh(this.mesh);
         this.gameLogic.render(this.window);
         this.window.update();
     }

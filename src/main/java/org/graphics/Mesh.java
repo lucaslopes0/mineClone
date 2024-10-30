@@ -38,28 +38,45 @@ public class Mesh {
     }
 
     public void create(){
-        this.vao = glGenVertexArrays();
-        glBindVertexArray(vao);
 
-        FloatBuffer positionBuffer = MemoryUtil.memAllocFloat(this.vertices.length*3);
-        float[] positionData =  new float[this.vertices.length * 3];
-        for (int i = 0; i < this.vertices.length; i++) {
-            positionData[i * 3] = this.vertices[i].getPosition().getX();
-            positionData[i * 3 + 1] = this.vertices[i].getPosition().getY();
-            positionData[i * 3 + 2] = this.vertices[i].getPosition().getZ();
+        FloatBuffer vertexBuffer = MemoryUtil.memAllocFloat(vertices.length * 7);  // 3 posição + 4 cor
+
+        for (Vertex vertex : vertices) {
+            vertexBuffer.put(vertex.getPosition().getX());
+            vertexBuffer.put(vertex.getPosition().getY());
+            vertexBuffer.put(vertex.getPosition().getZ());
+
+            vertexBuffer.put(vertex.getColor().getR());
+            vertexBuffer.put(vertex.getColor().getG());
+            vertexBuffer.put(vertex.getColor().getB());
+            vertexBuffer.put(vertex.getColor().getA());
         }
-        positionBuffer.put(positionData).flip();
+        vertexBuffer.flip();  // Preparar para leitura
 
-        pbo = glGenBuffers();
+        this.vao = glGenVertexArrays();
+        glBindVertexArray(this.vao);
+
+        this.pbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, this.pbo);
-        glBufferData(GL_ARRAY_BUFFER,positionBuffer,GL_STATIC_DRAW);
-        glVertexAttribPointer(0,3, GL_FLOAT,false, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER,0);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
+
+        // Definição do atributo de posição (location = 0)
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 7 * Float.BYTES, 0);
+
+        // Definição do atributo de cor (location = 1)
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 7 * Float.BYTES, 3 * Float.BYTES);
+
+        // Desvincula o buffer e o VAO
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
 
         IntBuffer indicesBuffer = MemoryUtil.memAllocInt(this.indices.length);
         indicesBuffer.put(this.indices).flip();
 
-        ibo = glGenBuffers();
+        this.ibo = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.ibo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);

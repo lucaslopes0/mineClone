@@ -2,7 +2,7 @@ package org.view;
 
 import org.controller.*;
 import org.engine.IGameLogic;
-import org.maths.Vector;
+import org.maths.VectorPosition;
 
 import java.util.Random;
 
@@ -15,7 +15,7 @@ public class GameView implements IGameLogic {
     private boolean isF11Pressed = false;
     private boolean isESCPressed = false;
     Random rand = new Random();
-    private Vector background = new Vector(this.rand.nextFloat(),this.rand.nextFloat(),this.rand.nextFloat());
+    private VectorPosition background = new VectorPosition(0.0f, 0.0f,0.0f);//this.rand.nextFloat(),this.rand.nextFloat(),this.rand.nextFloat());
 
     public GameView() throws Exception {
         this.renderer = new Renderer();
@@ -27,16 +27,16 @@ public class GameView implements IGameLogic {
     }
 
     @Override
-    public void input(InputController input, Window window) {
+    public void input(KeyboardInput keyInput, MouseInput mouseInput, Window window) {
         
-        if (input.isKeyPressed(GLFW_KEY_ESCAPE)){
+        if (keyInput.isKeyPressed(GLFW_KEY_ESCAPE)){
             if(!this.isESCPressed){
                 glfwSetWindowShouldClose(window.getWindowHandle(),true);
                 this.isESCPressed = true;
             }
         }else this.isESCPressed = false;
 
-        if (input.isKeyPressed(GLFW_KEY_F11)) {
+        if (keyInput.isKeyPressed(GLFW_KEY_F11)) {
             if (!this.isF11Pressed){
                 if (window.isFullscreen())
                     window.setWindowed();
@@ -48,14 +48,14 @@ public class GameView implements IGameLogic {
         }else this.isF11Pressed = false;
 
 
-        if (input.isMousePressed(GLFW_MOUSE_BUTTON_1))
+        if (mouseInput.isMousePressed(GLFW_MOUSE_BUTTON_1))
             System.out.println("Left button pressed");
-        else if (input.isMousePressed(GLFW_MOUSE_BUTTON_2))
+        else if (mouseInput.isMousePressed(GLFW_MOUSE_BUTTON_2))
             System.out.println("Right button pressed");
 
 
-        input.setMouseScroll();
-        input.cursorTracking();
+        mouseInput.setMouseScroll();
+        mouseInput.cursorTracking();
     }
 
     @Override

@@ -1,11 +1,12 @@
 package org.main;
 
-
-import org.engine.*;
+import org.engine.GameEngine;
+import org.engine.IGameLogic;
 import org.view.*;
 
 public class pMain {
     public static void main (String[] args) {
+
         try {
             boolean vSync = true;
             IGameLogic gameLogic = new GameView();

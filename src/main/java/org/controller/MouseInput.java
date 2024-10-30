@@ -4,21 +4,12 @@ import org.view.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import org.view.*;
-
-public class InputController {
-
+public class MouseInput {
     private final Window window;
 
-    public InputController(Window window){
+    public MouseInput(Window window){
         this.window = window;
     }
-
-
-    public boolean isKeyPressed(int keyCode) {
-        return glfwGetKey(this.window.getWindowHandle(), keyCode) == GLFW_PRESS;
-    }
-
     public boolean isMousePressed(int mButton){
         return glfwGetMouseButton(this.window.getWindowHandle(), mButton) == GLFW_PRESS;
     }
